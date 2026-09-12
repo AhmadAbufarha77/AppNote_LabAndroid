@@ -15,7 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import android.widget.ImageButton;
 
 public class SignUpActivity extends AppCompatActivity {
-
+//ahmad and maen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
