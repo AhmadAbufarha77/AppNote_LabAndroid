@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class MainActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
+    SharedPrefManager sharedPrefManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 1
         );
 
+        sharedPrefManager = SharedPrefManager.getInstance(this);
+
         TextInputLayout tilEmail = (TextInputLayout) findViewById(R.id.tilEmail);
         TextInputEditText etEmail = (TextInputEditText) findViewById(R.id.edEmail);
 
@@ -47,6 +50,16 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnSignIn = (Button) findViewById(R.id.btnSignIn);
         CheckBox cbRememberMe = (CheckBox) findViewById(R.id.cbRememberMe);
+
+        String savedEmail = sharedPrefManager.readString("email", "");
+        String savedPassword = sharedPrefManager.readString("password", "");
+        cbRememberMe.setChecked(sharedPrefManager.readBoolean("cbRemeberMe",false));
+        if (!savedEmail.isEmpty()) {
+            etEmail.setText(savedEmail);
+        }
+        if (!savedPassword.isEmpty()){
+            etPassword.setText(savedPassword);
+        }
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,20 +75,31 @@ public class MainActivity extends AppCompatActivity {
                     tilPassword.setError("Password is required");
                     valid=false;
                 }
+                if(!valid){
+                    return;
+                }
                 if(!databaseHelper.checkLogin(email,password)){
                    tilEmail.setError("Invalid email or password");
                    tilPassword.setError("Invalid email or password");
-                   valid=false;
+                   return;
                 }
 
-                if(!valid){
-                    return;
+                if (cbRememberMe.isChecked()) {
+                    sharedPrefManager.writeString("email", email);
+                    sharedPrefManager.writeString("password",password);
+                    sharedPrefManager.writeBoolean("cbRemeberMe",true);
+                } else {
+                    sharedPrefManager.writeString("email", "");
+                    sharedPrefManager.writeString("password", "");
+                    sharedPrefManager.writeBoolean("cbRemeberMe",false);
                 }
 
                 Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
         });
+
+
 
         clearErrorOnTyping(etEmail,tilEmail);
         clearErrorOnTyping(etPassword,tilPassword);
