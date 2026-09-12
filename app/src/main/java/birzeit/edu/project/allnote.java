@@ -39,7 +39,7 @@ public class allnote extends Fragment {
                 requireContext(),
                 "NoteApp.db",
                 null,
-                1
+                2
         );
 
         RecyclerView recyclerView =

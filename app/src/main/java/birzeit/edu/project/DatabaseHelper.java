@@ -41,7 +41,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (oldVersion < 2) {
+            db.execSQL(
+                    "CREATE TABLE NOTES(" +
+                            "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            "TITLE TEXT NOT NULL, " +
+                            "CONTENT TEXT, " +
+                            "TAG TEXT, " +
+                            "CREATION_DATE TEXT, " +
+                            "FAVORITE INTEGER DEFAULT 0)"
+            );
+        }
     }
 
     public boolean emailExists(String email) {

@@ -40,7 +40,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 this,
                 "NoteApp.db",
                 null,
-                1
+                2
         );
 
         String currentDate =

@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
                 this,
                 "NoteApp.db",
                 null,
-                1
+                2
         );
 
         sharedPrefManager = SharedPrefManager.getInstance(this);
@@ -86,20 +87,20 @@ public class MainActivity extends AppCompatActivity {
 
                 if (cbRememberMe.isChecked()) {
                     sharedPrefManager.writeString("email", email);
-                    sharedPrefManager.writeString("password",password);
                     sharedPrefManager.writeBoolean("cbRemeberMe",true);
                 } else {
                     sharedPrefManager.writeString("email", "");
-                    sharedPrefManager.writeString("password", "");
                     sharedPrefManager.writeBoolean("cbRemeberMe",false);
                 }
-
+                Toast.makeText(
+                        MainActivity.this,
+                        "Login successful",
+                        Toast.LENGTH_SHORT
+                ).show();
                 Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
         });
-
-
 
         clearErrorOnTyping(etEmail,tilEmail);
         clearErrorOnTyping(etPassword,tilPassword);
