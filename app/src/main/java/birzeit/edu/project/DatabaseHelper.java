@@ -20,7 +20,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "LAST_NAME TEXT, " +
                         "PASSWORD TEXT)"
         );
-        //NOTE Table
+        db.execSQL(
+                "CREATE TABLE NOTES(" +
+                        "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "TITLE TEXT NOT NULL, " +
+                        "CONTENT TEXT, " +
+                        "TAG TEXT, " +
+                        "CREATION_DATE TEXT, " +
+                        "FAVORITE INTEGER DEFAULT 0)"
+        );
+
 
 
 
@@ -112,6 +121,83 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    //Note Function
+    public long insertNote(AddNote note) {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put("TITLE", note.getTitle());
+        values.put("CONTENT", note.getContent());
+        values.put("TAG", note.getTag());
+        values.put("CREATION_DATE", note.getCreationDate());
+        values.put("FAVORITE", note.isFavorite() ? 1 : 0);
+
+        return db.insert("NOTES", null, values);
+    }
+
+    public java.util.ArrayList<AddNote> getAllNotes() {
+
+        java.util.ArrayList<AddNote> notes =
+                new java.util.ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM NOTES ORDER BY ID DESC",
+                null
+        );
+
+        if (cursor.moveToFirst()) {
+
+            do {
+
+                AddNote note = new AddNote();
+
+                note.setId(
+                        cursor.getInt(
+                                cursor.getColumnIndexOrThrow("ID")
+                        )
+                );
+
+                note.setTitle(
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow("TITLE")
+                        )
+                );
+
+                note.setContent(
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow("CONTENT")
+                        )
+                );
+
+                note.setTag(
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow("TAG")
+                        )
+                );
+
+                note.setCreationDate(
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow("CREATION_DATE")
+                        )
+                );
+
+                note.setFavorite(
+                        cursor.getInt(
+                                cursor.getColumnIndexOrThrow("FAVORITE")
+                        ) == 1
+                );
+
+                notes.add(note);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return notes;
+    }
 
 }
