@@ -76,47 +76,44 @@ public class SignUpActivity extends AppCompatActivity {
                 if(!isValidEmail(etEmail.getText().toString())){
                     tilEmail.setError("Invalid email");
                     valid = false;
-                } else {tilEmail.setError(null);}
+                }
+                else if(databaseHelper.emailExists(etEmail.getText().toString())){
+                    tilEmail.setError("Email already registered");
+                    valid = false;
+                }
                 if (!isValidName(etFirstName.getText().toString())) {
                     tilFirstName.setError("First name must be 3 to 10 characters");
                     valid = false;
-                } else {tilFirstName.setError(null);}
+                }
                 if (!isValidName(etLastName.getText().toString())) {
                     tilLastName.setError("Last name must be 3 to 10 characters");
                     valid = false;
-                }else {tilLastName.setError(null);}
+                }
                 if (!isValidPassword(etPassword.getText().toString())) {
                     tilPassword.setError("Password must be 6-12 characters and contain uppercase, lowercase and number");
                     valid = false;
-                }else {tilPassword.setError(null);}
+                }
                 if (!etConfirmPassword.getText().toString().equals(etPassword.getText().toString())) {
                     tilConfirmPassword.setError("Passwords do not match");
                     valid = false;
-                } else {tilConfirmPassword.setError(null);}
+                }
 
                 if(!valid){return;}
 
-                if(databaseHelper.emailExists(etEmail.getText().toString())){
-                    tilEmail.setError("Email already registered");
-                }
-                else {
-                    User user = new User();
-                    user.setEmail(etEmail.getText().toString());
-                    user.setFirstName(etFirstName.getText().toString());
-                    user.setLastName(etLastName.getText().toString());
-                    user.setPassword(etPassword.getText().toString());
-                    databaseHelper.insertUser(user);
+                User user = new User();
+                user.setEmail(etEmail.getText().toString());
+                user.setFirstName(etFirstName.getText().toString());
+                user.setLastName(etLastName.getText().toString());
+                user.setPassword(etPassword.getText().toString());
+                databaseHelper.insertUser(user);
 
-                    Toast.makeText(
-                            SignUpActivity.this,
-                            "Account created successfully",
-                            Toast.LENGTH_SHORT
-                    ).show();
+                Toast.makeText(
+                        SignUpActivity.this,
+                        "Account created successfully",
+                        Toast.LENGTH_SHORT
+                ).show();
 
-                    finish();
-                }
-
-
+                finish();
             }
         });
 
