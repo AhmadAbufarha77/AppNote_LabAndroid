@@ -3,6 +3,8 @@ package birzeit.edu.project;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -26,10 +28,27 @@ public class HomeActivity extends AppCompatActivity {
 
         drawerLayout = findViewById(R.id.drawerLayout);
         toolbar = findViewById(R.id.toolbar);
+
         NavigationView navigationView = findViewById(R.id.navigationView);
+        View headerView =  navigationView.inflateHeaderView(R.layout.nav_header);
+        TextView tvDrawerName = headerView.findViewById(R.id.tvDrawerName);
+        TextView tvDrawerEmail = headerView.findViewById(R.id.tvDrawerEmail);
 
         setSupportActionBar(toolbar);
 
+        SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(this);
+
+        String currentUserEmail = sharedPrefManager.readString("currentUserEmail", "");
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(this, "NoteApp.db", null, 3);
+
+        User user = databaseHelper.getUserByEmail(currentUserEmail);
+
+        if (user != null) {
+            tvDrawerName.setText(user.getFirstName() + " " + user.getLastName()
+            );
+            tvDrawerEmail.setText(user.getEmail());
+        }
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
@@ -108,5 +127,38 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    public void refreshDrawerHeader() {
+
+        NavigationView navigationView = findViewById(R.id.navigationView);
+
+        View headerView = navigationView.getHeaderView(0);
+
+        TextView tvDrawerName =
+                headerView.findViewById(R.id.tvDrawerName);
+
+        TextView tvDrawerEmail =
+                headerView.findViewById(R.id.tvDrawerEmail);
+
+        SharedPrefManager sharedPrefManager =
+                SharedPrefManager.getInstance(this);
+
+        String currentUserEmail =
+                sharedPrefManager.readString("currentUserEmail", "");
+
+        DatabaseHelper databaseHelper =
+                new DatabaseHelper(this, "NoteApp.db", null, 3);
+
+        User user =
+                databaseHelper.getUserByEmail(currentUserEmail);
+
+        if (user != null) {
+            tvDrawerName.setText(
+                    user.getFirstName() + " " + user.getLastName()
+            );
+
+            tvDrawerEmail.setText(user.getEmail());
+        }
     }
 }

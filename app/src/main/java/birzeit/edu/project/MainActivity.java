@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
                 this,
                 "NoteApp.db",
                 null,
-                2
+                3
         );
 
         sharedPrefManager = SharedPrefManager.getInstance(this);
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     sharedPrefManager.writeString("email", "");
                     sharedPrefManager.writeBoolean("cbRemeberMe",false);
                 }
+                sharedPrefManager.writeString("currentUserEmail", email);
                 Toast.makeText(
                         MainActivity.this,
                         "Login successful",

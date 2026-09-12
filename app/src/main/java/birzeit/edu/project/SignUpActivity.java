@@ -47,7 +47,7 @@ public class SignUpActivity extends AppCompatActivity {
                 this,
                 "NoteApp.db",
                 null,
-                2
+                3
         );
 
         ImageView btnBack = findViewById(R.id.btnBack);

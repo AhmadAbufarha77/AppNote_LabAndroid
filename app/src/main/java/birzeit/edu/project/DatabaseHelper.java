@@ -27,15 +27,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "CONTENT TEXT, " +
                         "TAG TEXT, " +
                         "CREATION_DATE TEXT, " +
-                        "FAVORITE INTEGER DEFAULT 0)"
+                        "FAVORITE INTEGER DEFAULT 0," +
+                        "USER_EMAIL TEXT)"
         );
-
-
-
-
-
-
-
 
     }
 
@@ -49,7 +43,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             "CONTENT TEXT, " +
                             "TAG TEXT, " +
                             "CREATION_DATE TEXT, " +
-                            "FAVORITE INTEGER DEFAULT 0)"
+                            "FAVORITE INTEGER DEFAULT 0," +
+                            "USER_EMAIL TEXT)"
+            );
+        }
+        if (oldVersion < 3) {
+            db.execSQL(
+                    "ALTER TABLE NOTES ADD COLUMN USER_EMAIL TEXT"
             );
         }
     }
@@ -94,6 +94,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return exists;
+    }
+
+    public User getUserByEmail(String email) {
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM USERS WHERE EMAIL = ?",
+                new String[]{email}
+        );
+
+        User user = null;
+
+        if (cursor.moveToFirst()) {
+            user = new User();
+
+            user.setEmail(cursor.getString(0));
+            user.setFirstName(cursor.getString(1));
+            user.setLastName(cursor.getString(2));
+            user.setPassword(cursor.getString(3));
+        }
+
+        cursor.close();
+
+        return user;
+    }
+
+    public void updateUser(User user) {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put("FIRST_NAME", user.getFirstName());
+        values.put("LAST_NAME", user.getLastName());
+        values.put("PASSWORD", user.getPassword());
+
+        db.update(
+                "USERS",
+                values,
+                "EMAIL = ?",
+                new String[]{user.getEmail()}
+        );
     }
 
 
@@ -142,11 +185,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("TAG", note.getTag());
         values.put("CREATION_DATE", note.getCreationDate());
         values.put("FAVORITE", note.isFavorite() ? 1 : 0);
+        values.put("USER_EMAIL", note.getUserEmail());
 
         return db.insert("NOTES", null, values);
     }
 
-    public java.util.ArrayList<AddNote> getAllNotes() {
+    public java.util.ArrayList<AddNote> getAllNotes(String email) {
 
         java.util.ArrayList<AddNote> notes =
                 new java.util.ArrayList<>();
@@ -154,8 +198,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.rawQuery(
-                "SELECT * FROM NOTES ORDER BY ID DESC",
-                null
+                "SELECT * FROM NOTES WHERE USER_EMAIL = ? ORDER BY ID DESC",
+                new String[]{email}
         );
 
         if (cursor.moveToFirst()) {

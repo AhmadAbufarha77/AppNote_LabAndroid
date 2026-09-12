@@ -39,7 +39,7 @@ public class allnote extends Fragment {
                 requireContext(),
                 "NoteApp.db",
                 null,
-                2
+                3
         );
 
         RecyclerView recyclerView =
@@ -53,8 +53,11 @@ public class allnote extends Fragment {
                 )
         );
 
+        SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(requireContext());
+
+        String currentUserEmail = sharedPrefManager.readString("currentUserEmail", "");
         ArrayList<AddNote> notes =
-                databaseHelper.getAllNotes();
+                databaseHelper.getAllNotes(currentUserEmail);
 
         adapter = new NoteAdapter(
                 notes,
@@ -94,9 +97,11 @@ public class allnote extends Fragment {
 
         if (databaseHelper != null &&
                 adapter != null) {
+            SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(requireContext());
 
+            String currentUserEmail = sharedPrefManager.readString("currentUserEmail", "");
             adapter.setNotes(
-                    databaseHelper.getAllNotes()
+                    databaseHelper.getAllNotes(currentUserEmail)
             );
         }
     }

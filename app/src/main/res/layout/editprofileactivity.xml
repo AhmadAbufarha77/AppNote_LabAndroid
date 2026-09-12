@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screen_bg">
@@ -22,78 +23,91 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/etEditFirstName"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEditFirstName"
             android:layout_width="0dp"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="26dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/bg_input"
             android:hint="First Name"
-            android:inputType="textPersonName"
-            android:text="John"
+            app:boxBackgroundMode="outline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbarEditProfile" />
+            app:layout_constraintTop_toBottomOf="@id/toolbarEditProfile">
 
-        <EditText
-            android:id="@+id/etEditLastName"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEditFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEditLastName"
             android:layout_width="0dp"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/bg_input"
             android:hint="Last Name"
-            android:inputType="textPersonName"
-            android:text="Doe"
+            app:boxBackgroundMode="outline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etEditFirstName" />
+            app:layout_constraintTop_toBottomOf="@id/tilEditFirstName">
 
-        <EditText
-            android:id="@+id/etEditEmail"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/bg_input"
-            android:enabled="false"
-            android:hint="Email"
-            android:text="john.doe@email.com"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etEditLastName" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEditLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/etNewPassword"
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilNewPassword"
             android:layout_width="0dp"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/bg_input"
             android:hint="New Password"
-            android:inputType="textPassword"
+            app:boxBackgroundMode="outline"
+            app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etEditEmail" />
+            app:layout_constraintTop_toBottomOf="@id/tilEditLastName">
 
-        <EditText
-            android:id="@+id/etConfirmNewPassword"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etNewPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilConfirmNewPassword"
             android:layout_width="0dp"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/bg_input"
             android:hint="Confirm New Password"
-            android:inputType="textPassword"
+            app:boxBackgroundMode="outline"
+            app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etNewPassword" />
+            app:layout_constraintTop_toBottomOf="@id/tilNewPassword">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etConfirmNewPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btnSaveProfile"
@@ -109,7 +123,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etConfirmNewPassword" />
+            app:layout_constraintTop_toBottomOf="@id/tilConfirmNewPassword" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </ScrollView>

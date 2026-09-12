@@ -14,13 +14,16 @@ import java.util.Date;
 import java.util.Locale;
 
 public class AddNoteActivity extends AppCompatActivity {
-
+    SharedPrefManager sharedPrefManager;
     private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addnoteactivity);
+
+        sharedPrefManager = SharedPrefManager.getInstance(this);
+        String currentUserEmail = sharedPrefManager.readString("currentUserEmail", "");
 
         Toolbar toolbar = findViewById(R.id.toolbarAddNote);
 
@@ -40,7 +43,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 this,
                 "NoteApp.db",
                 null,
-                2
+                3
         );
 
         String currentDate =
@@ -80,7 +83,8 @@ public class AddNoteActivity extends AppCompatActivity {
                     content,
                     tag,
                     currentDate,
-                    false
+                    false,
+                    currentUserEmail
             );
 
             long result =

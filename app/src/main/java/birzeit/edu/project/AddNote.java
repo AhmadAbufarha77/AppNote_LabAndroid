@@ -8,18 +8,20 @@ public class AddNote {
     private String tag;
     private String creationDate;
     private boolean favorite;
+    private String userEmail;
 
     public AddNote() {
     }
 
     public AddNote(int id, String title, String content,
-                   String tag, String creationDate, boolean favorite) {
+                   String tag, String creationDate, boolean favorite,String userEmail) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.tag = tag;
         this.creationDate = creationDate;
         this.favorite = favorite;
+        this.userEmail = userEmail;
     }
 
     public int getId() {
@@ -68,5 +70,13 @@ public class AddNote {
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }
