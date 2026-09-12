@@ -20,6 +20,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "LAST_NAME TEXT, " +
                         "PASSWORD TEXT)"
         );
+        //NOTE Table
+
+
+
+
+
+
+
     }
 
     @Override
@@ -52,5 +60,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("PASSWORD", user.getPassword());
         sqLiteDatabase.insert("USERS", null, contentValues);
     }
+
+    public boolean checkLogin(String email, String password) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT EMAIL FROM USERS WHERE EMAIL = ? AND PASSWORD =?",
+                new String[]{email,password}
+        );
+
+        boolean exists = cursor.getCount() > 0;
+
+        cursor.close();
+
+        return exists;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //Note Function
 
 }
