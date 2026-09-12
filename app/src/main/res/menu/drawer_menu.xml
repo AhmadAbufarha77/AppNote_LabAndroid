@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_all" android:icon="@android:drawable/ic_menu_agenda" android:title="All Notes" />
+        <item android:id="@+id/nav_favorites" android:icon="@android:drawable/btn_star_big_on" android:title="Favorites" />
+        <item android:id="@+id/nav_sorted" android:icon="@android:drawable/ic_menu_sort_by_size" android:title="Sorted" />
+        <item android:id="@+id/nav_search" android:icon="@android:drawable/ic_menu_search" android:title="Search" />
+        <item android:id="@+id/nav_profile" android:icon="@android:drawable/ic_menu_myplaces" android:title="Profile" />
+    </group>
+    <item android:title="">
+        <menu>
+            <item android:id="@+id/nav_logout" android:icon="@android:drawable/ic_lock_power_off" android:title="Logout" />
+        </menu>
+    </item>
+</menu>
