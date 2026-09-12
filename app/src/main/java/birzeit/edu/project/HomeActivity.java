@@ -76,8 +76,22 @@ public class HomeActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void openNoteDetails() {
-        openFragment(new NoteDetailsFragment(), "Note Details");
+    public void openNoteDetails(AddNote note) {
+
+        NoteDetailsFragment fragment = new NoteDetailsFragment();
+
+        Bundle bundle = new Bundle();
+
+        bundle.putInt("noteId", note.getId());
+        bundle.putString("title", note.getTitle());
+        bundle.putString("content", note.getContent());
+        bundle.putString("tag", note.getTag());
+        bundle.putString("date", note.getCreationDate());
+        bundle.putBoolean("favorite", note.isFavorite());
+
+        fragment.setArguments(bundle);
+
+        openFragment(fragment, "Note Details");
     }
 
     private void showLogoutDialog() {
