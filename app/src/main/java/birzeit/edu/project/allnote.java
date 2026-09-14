@@ -35,12 +35,14 @@ public class allnote extends Fragment {
                 false
         );
 
+
         databaseHelper = new DatabaseHelper(
                 requireContext(),
                 "NoteApp.db",
                 null,
                 3
         );
+
 
         RecyclerView recyclerView =
                 view.findViewById(
@@ -53,24 +55,67 @@ public class allnote extends Fragment {
                 )
         );
 
-        SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(requireContext());
 
-        String currentUserEmail = sharedPrefManager.readString("currentUserEmail", "");
+        SharedPrefManager sharedPrefManager =
+                SharedPrefManager.getInstance(
+                        requireContext()
+                );
+
+        String currentUserEmail =
+                sharedPrefManager.readString(
+                        "currentUserEmail",
+                        ""
+                );
+
+
         ArrayList<AddNote> notes =
-                databaseHelper.getAllNotes(currentUserEmail);
+                databaseHelper.getAllNotes(
+                        currentUserEmail
+                );
+
 
         adapter = new NoteAdapter(
                 notes,
-                note -> {
+                new NoteAdapter.OnNoteClickListener() {
 
-                    HomeActivity homeActivity =
-                            (HomeActivity) requireActivity();
+                    @Override
+                    public void onNoteClick(AddNote note) {
 
-                    homeActivity.openNoteDetails(note);
+                        HomeActivity homeActivity =
+                                (HomeActivity) requireActivity();
+
+                        homeActivity.openNoteDetails(note);
+                    }
+
+
+                    @Override
+                    public void onFavoriteClick(
+                            AddNote note,
+                            int position
+                    ) {
+
+                        boolean newFavorite =
+                                !note.isFavorite();
+
+                        note.setFavorite(
+                                newFavorite
+                        );
+
+                        databaseHelper.updateFavorite(
+                                note.getId(),
+                                newFavorite
+                        );
+
+                        adapter.notifyItemChanged(
+                                position
+                        );
+                    }
                 }
         );
 
+
         recyclerView.setAdapter(adapter);
+
 
         FloatingActionButton fab =
                 view.findViewById(
@@ -88,20 +133,34 @@ public class allnote extends Fragment {
             startActivity(intent);
         });
 
+
         return view;
     }
 
+
     @Override
     public void onResume() {
+
         super.onResume();
 
         if (databaseHelper != null &&
                 adapter != null) {
-            SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(requireContext());
 
-            String currentUserEmail = sharedPrefManager.readString("currentUserEmail", "");
+            SharedPrefManager sharedPrefManager =
+                    SharedPrefManager.getInstance(
+                            requireContext()
+                    );
+
+            String currentUserEmail =
+                    sharedPrefManager.readString(
+                            "currentUserEmail",
+                            ""
+                    );
+
             adapter.setNotes(
-                    databaseHelper.getAllNotes(currentUserEmail)
+                    databaseHelper.getAllNotes(
+                            currentUserEmail
+                    )
             );
         }
     }

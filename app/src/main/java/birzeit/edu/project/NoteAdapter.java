@@ -3,6 +3,8 @@ package birzeit.edu.project;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
     public interface OnNoteClickListener {
         void onNoteClick(AddNote note);
+        void onFavoriteClick(AddNote note, int position);
     }
 
     public NoteAdapter(
@@ -75,11 +78,41 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             );
         }
 
+
         holder.itemView.setOnClickListener(v -> {
 
             if (listener != null) {
                 listener.onNoteClick(note);
             }
+
+        });
+
+
+        holder.btnFavorite.setOnClickListener(v -> {
+
+            Animation animation =
+                    AnimationUtils.loadAnimation(
+                            v.getContext(),
+                            R.anim.favorite_star
+                    );
+
+            holder.btnFavorite.startAnimation(
+                    animation
+            );
+
+
+            int currentPosition =
+                    holder.getAdapterPosition();
+
+            if (listener != null &&
+                    currentPosition != RecyclerView.NO_POSITION) {
+
+                listener.onFavoriteClick(
+                        note,
+                        currentPosition
+                );
+            }
+
         });
     }
 
@@ -94,6 +127,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         notifyDataSetChanged();
     }
 
+
     public static class NoteViewHolder
             extends RecyclerView.ViewHolder {
 
@@ -104,6 +138,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         public NoteViewHolder(
                 @NonNull View itemView
         ) {
+
             super(itemView);
 
             tvTitle =

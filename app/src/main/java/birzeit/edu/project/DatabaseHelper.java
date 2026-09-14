@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version)
@@ -253,5 +255,158 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return notes;
     }
+    public void updateFavorite(int noteId, boolean favorite) {
 
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put("FAVORITE", favorite ? 1 : 0);
+
+        db.update(
+                "NOTES",
+                values,
+                "ID = ?",
+                new String[]{String.valueOf(noteId)}
+        );
+    }
+    public ArrayList<AddNote> getSortedNotes(String email, String sortOrder) {
+
+        ArrayList<AddNote> notes = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query;
+
+        if (sortOrder.equals("alphabetical")) {
+
+            query = "SELECT * FROM NOTES " +
+                    "WHERE USER_EMAIL = ? " +
+                    "ORDER BY TITLE ASC";
+
+        } else {
+
+            query = "SELECT * FROM NOTES " +
+                    "WHERE USER_EMAIL = ? " +
+                    "ORDER BY ID DESC";
+        }
+
+        Cursor cursor = db.rawQuery(
+                query,
+                new String[]{email}
+        );
+
+        if (cursor.moveToFirst()) {
+
+            do {
+
+                AddNote note = new AddNote();
+
+                note.setId(
+                        cursor.getInt(
+                                cursor.getColumnIndexOrThrow("ID")
+                        )
+                );
+
+                note.setTitle(
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow("TITLE")
+                        )
+                );
+
+                note.setContent(
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow("CONTENT")
+                        )
+                );
+
+                note.setTag(
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow("TAG")
+                        )
+                );
+
+                note.setCreationDate(
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow("CREATION_DATE")
+                        )
+                );
+
+                note.setFavorite(
+                        cursor.getInt(
+                                cursor.getColumnIndexOrThrow("FAVORITE")
+                        ) == 1
+                );
+
+                note.setUserEmail(
+                        cursor.getString(
+                                cursor.getColumnIndexOrThrow("USER_EMAIL")
+                        )
+                );
+
+                notes.add(note);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return notes;
+    }
+    public ArrayList<AddNote> getFavoriteNotes(String email) {
+
+        ArrayList<AddNote> notes = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM NOTES WHERE USER_EMAIL = ? AND FAVORITE = 1 ORDER BY ID DESC",
+                new String[]{email}
+        );
+
+        if (cursor.moveToFirst()) {
+
+            do {
+
+                AddNote note = new AddNote();
+
+                note.setId(cursor.getInt(
+                        cursor.getColumnIndexOrThrow("ID")
+                ));
+
+                note.setTitle(cursor.getString(
+                        cursor.getColumnIndexOrThrow("TITLE")
+                ));
+
+                note.setContent(cursor.getString(
+                        cursor.getColumnIndexOrThrow("CONTENT")
+                ));
+
+                note.setTag(cursor.getString(
+                        cursor.getColumnIndexOrThrow("TAG")
+                ));
+
+                note.setCreationDate(cursor.getString(
+                        cursor.getColumnIndexOrThrow("CREATION_DATE")
+                ));
+
+                note.setFavorite(
+                        cursor.getInt(
+                                cursor.getColumnIndexOrThrow("FAVORITE")
+                        ) == 1
+                );
+
+                note.setUserEmail(cursor.getString(
+                        cursor.getColumnIndexOrThrow("USER_EMAIL")
+                ));
+
+                notes.add(note);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return notes;
+    }
 }
