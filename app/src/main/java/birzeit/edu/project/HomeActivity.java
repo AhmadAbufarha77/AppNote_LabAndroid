@@ -112,7 +112,13 @@ public class HomeActivity extends AppCompatActivity {
 
         openFragment(fragment, "Note Details");
     }
+    public void openAllNotes() {
 
+        openFragment(
+                new allnote(),
+                "All Notes"
+        );
+    }
     private void showLogoutDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Logout")

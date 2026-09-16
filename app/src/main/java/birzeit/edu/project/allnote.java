@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +21,11 @@ public class allnote extends Fragment {
 
     private DatabaseHelper databaseHelper;
     private NoteAdapter adapter;
+
+    private Spinner spinnerTagFilter;
+
+    private String currentUserEmail;
+    private String selectedTag = "All Tags";
 
     public allnote() {
     }
@@ -44,28 +52,34 @@ public class allnote extends Fragment {
         );
 
 
+        SharedPrefManager sharedPrefManager =
+                SharedPrefManager.getInstance(
+                        requireContext()
+                );
+
+        currentUserEmail =
+                sharedPrefManager.readString(
+                        "currentUserEmail",
+                        ""
+                );
+
+
         RecyclerView recyclerView =
                 view.findViewById(
                         R.id.recyclerAllNotes
                 );
+
+        spinnerTagFilter =
+                view.findViewById(
+                        R.id.spinnerTagFilter
+                );
+
 
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
                         requireContext()
                 )
         );
-
-
-        SharedPrefManager sharedPrefManager =
-                SharedPrefManager.getInstance(
-                        requireContext()
-                );
-
-        String currentUserEmail =
-                sharedPrefManager.readString(
-                        "currentUserEmail",
-                        ""
-                );
 
 
         ArrayList<AddNote> notes =
@@ -79,12 +93,16 @@ public class allnote extends Fragment {
                 new NoteAdapter.OnNoteClickListener() {
 
                     @Override
-                    public void onNoteClick(AddNote note) {
+                    public void onNoteClick(
+                            AddNote note
+                    ) {
 
                         HomeActivity homeActivity =
                                 (HomeActivity) requireActivity();
 
-                        homeActivity.openNoteDetails(note);
+                        homeActivity.openNoteDetails(
+                                note
+                        );
                     }
 
 
@@ -114,13 +132,48 @@ public class allnote extends Fragment {
         );
 
 
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(
+                adapter
+        );
+
+
+        loadTags();
+
+
+        spinnerTagFilter.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+
+                    @Override
+                    public void onItemSelected(
+                            AdapterView<?> parent,
+                            View view,
+                            int position,
+                            long id
+                    ) {
+
+                        selectedTag =
+                                parent.getItemAtPosition(
+                                        position
+                                ).toString();
+
+                        loadNotes();
+                    }
+
+
+                    @Override
+                    public void onNothingSelected(
+                            AdapterView<?> parent
+                    ) {
+                    }
+                }
+        );
 
 
         FloatingActionButton fab =
                 view.findViewById(
                         R.id.fabAddNote
                 );
+
 
         fab.setOnClickListener(v -> {
 
@@ -138,30 +191,66 @@ public class allnote extends Fragment {
     }
 
 
-    @Override
-    public void onResume() {
+    private void loadTags() {
 
-        super.onResume();
+        ArrayList<String> tags =
+                databaseHelper.getUserTags(
+                        currentUserEmail
+                );
 
-        if (databaseHelper != null &&
-                adapter != null) {
 
-            SharedPrefManager sharedPrefManager =
-                    SharedPrefManager.getInstance(
-                            requireContext()
-                    );
+        ArrayAdapter<String> tagAdapter =
+                new ArrayAdapter<>(
+                        requireContext(),
+                        android.R.layout.simple_spinner_item,
+                        tags
+                );
 
-            String currentUserEmail =
-                    sharedPrefManager.readString(
-                            "currentUserEmail",
-                            ""
-                    );
+
+        tagAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+
+
+        spinnerTagFilter.setAdapter(
+                tagAdapter
+        );
+    }
+
+
+    private void loadNotes() {
+
+        if (selectedTag.equals("All Tags")) {
 
             adapter.setNotes(
                     databaseHelper.getAllNotes(
                             currentUserEmail
                     )
             );
+
+        } else {
+
+            adapter.setNotes(
+                    databaseHelper.getNotesByTag(
+                            currentUserEmail,
+                            selectedTag
+                    )
+            );
+        }
+    }
+
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        if (databaseHelper != null &&
+                adapter != null &&
+                spinnerTagFilter != null) {
+
+            loadTags();
+            loadNotes();
         }
     }
 }
