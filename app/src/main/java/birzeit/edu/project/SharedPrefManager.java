@@ -25,14 +25,15 @@ public class SharedPrefManager {
     public boolean writeString(String key, String value) {
         editor.putString(key, value);
         return editor.commit();
-    } public String readString(String key, String defaultValue) {
+    }
+    public String readString(String key, String defaultValue) {
         return sharedPreferences.getString(key, defaultValue);
     }
-
     public boolean writeBoolean(String key, boolean value) {
         editor.putBoolean(key, value);
         return editor.commit();
-    } public Boolean readBoolean(String key, boolean defaultValue) {
+    }
+    public Boolean readBoolean(String key, boolean defaultValue) {
         return sharedPreferences.getBoolean(key, defaultValue);
     }
 }

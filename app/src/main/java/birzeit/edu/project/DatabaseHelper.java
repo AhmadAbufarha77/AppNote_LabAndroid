@@ -13,7 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version)
     { super(context, name, factory, version); }
 
-    @Override
+    @Override // Creates tables when database is first created.
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
                 "CREATE TABLE USERS(" +
@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    @Override
+    @Override // Updates tables when database version changes.
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 2) {
             db.execSQL(
@@ -56,7 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean emailExists(String email) {
+    public boolean emailExists(String email) { // Checks email before Sign Up.
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -72,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    public void insertUser(User user) {
+    public void insertUser(User user) { // Saves a new user during Sign Up.
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("EMAIL", user.getEmail());
@@ -82,7 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert("USERS", null, contentValues);
     }
 
-    public boolean checkLogin(String email, String password) {
+    public boolean checkLogin(String email, String password) { // Checks email and password during Sign In.
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -98,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) {// Gets user data for Profile.
 
         SQLiteDatabase db = getReadableDatabase();
 
@@ -123,7 +123,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return user;
     }
 
-    public void updateUser(User user) {
+    public void updateUser(User user) { // Updates user data from Edit Profile.
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -140,43 +140,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{user.getEmail()}
         );
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public long insertNote(AddNote note) {
+    public long insertNote(AddNote note) {// Saves a new note from Add Note.
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -192,7 +156,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert("NOTES", null, values);
     }
 
-    public java.util.ArrayList<AddNote> getAllNotes(String email) {
+    public java.util.ArrayList<AddNote> getAllNotes(String email) {// Gets all notes for All Notes page.
 
         java.util.ArrayList<AddNote> notes =
                 new java.util.ArrayList<>();
@@ -255,7 +219,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return notes;
     }
-    public void updateFavorite(int noteId, boolean favorite) {
+    public void updateFavorite(int noteId, boolean favorite) {// Updates favorite status when star is clicked.
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -270,7 +234,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(noteId)}
         );
     }
-    public ArrayList<AddNote> getSortedNotes(String email, String sortOrder) {
+    public ArrayList<AddNote> getSortedNotes(String email, String sortOrder) {// Gets notes for Sorted page.
 
         ArrayList<AddNote> notes = new ArrayList<>();
 
@@ -353,7 +317,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return notes;
     }
-    public ArrayList<AddNote> getFavoriteNotes(String email) {
+    public ArrayList<AddNote> getFavoriteNotes(String email) {// Gets favorite notes for Favorites page.
 
         ArrayList<AddNote> notes = new ArrayList<>();
 
@@ -409,7 +373,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return notes;
     }
-    public int updateNote(
+    public int updateNote(// Updates note from Edit Note.
             int noteId,
             String title,
             String content,
@@ -433,7 +397,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public int deleteNote(int noteId) {
+    public int deleteNote(int noteId) {// Deletes note from Note Details.
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -445,7 +409,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public AddNote getNoteById(int noteId) {
+    public AddNote getNoteById(int noteId) {// Gets one note for Note Details/Edit.
 
         SQLiteDatabase db = getReadableDatabase();
 
@@ -507,7 +471,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return note;
     }
-    public ArrayList<AddNote> searchNotes(
+    public ArrayList<AddNote> searchNotes(// Searches notes by title or content.
             String email,
             String searchText
     ) {
@@ -587,7 +551,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return notes;
     }
-    public ArrayList<String> getUserTags(String email) {
+    public ArrayList<String> getUserTags(String email) {// Gets tags for the tag filter.
 
         ArrayList<String> tags = new ArrayList<>();
 
@@ -619,7 +583,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return tags;
     }
-    public ArrayList<AddNote> getNotesByTag(
+    public ArrayList<AddNote> getNotesByTag(// Gets notes for selected tag.
             String email,
             String tag
     ) {

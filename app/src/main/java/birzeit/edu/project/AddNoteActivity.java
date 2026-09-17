@@ -21,87 +21,45 @@ public class AddNoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addnoteactivity);
-
         sharedPrefManager = SharedPrefManager.getInstance(this);
         String currentUserEmail = sharedPrefManager.readString("currentUserEmail", "");
-
         Toolbar toolbar = findViewById(R.id.toolbarAddNote);
-
         EditText etTitle = findViewById(R.id.etNoteTitle);
         EditText etContent = findViewById(R.id.etNoteContent);
         EditText etTag = findViewById(R.id.etTag);
-
-        TextView tvCreationDate =
-                findViewById(R.id.tvCreationDate);
-
-        Button btnSaveNote =
-                findViewById(R.id.btnSaveNote);
-
+        TextView tvCreationDate = findViewById(R.id.tvCreationDate);
+        Button btnSaveNote = findViewById(R.id.btnSaveNote);
         toolbar.setNavigationOnClickListener(v -> finish());
-
         databaseHelper = new DatabaseHelper(
                 this,
                 "NoteApp.db",
                 null,
                 3
         );
-
-        String currentDate =
-                new SimpleDateFormat(
-                        "dd MMM yyyy",
-                        Locale.getDefault()
-                ).format(new Date());
-
-        tvCreationDate.setText(
-                "Creation date: " + currentDate
-        );
-
+        String currentDate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(new Date());
+        tvCreationDate.setText("Creation date: " + currentDate);
         btnSaveNote.setOnClickListener(v -> {
-
-            String title =
-                    etTitle.getText().toString().trim();
-
-            String content =
-                    etContent.getText().toString().trim();
-
-            String tag =
-                    etTag.getText().toString().trim();
-
+            String title = etTitle.getText().toString().trim();
+            String content = etContent.getText().toString().trim();
+            String tag = etTag.getText().toString().trim();
             if (title.isEmpty()) {
                 etTitle.setError("Title is required");
                 return;
             }
-
             if (content.isEmpty()) {
                 etContent.setError("Content is required");
                 return;
             }
-
-            AddNote note = new AddNote(
-                    0,
-                    title,
-                    content,
-                    tag,
-                    currentDate,
-                    false,
-                    currentUserEmail
-            );
-
-            long result =
-                    databaseHelper.insertNote(note);
-
+            AddNote note = new AddNote(0, title, content, tag, currentDate, false, currentUserEmail);
+            long result = databaseHelper.insertNote(note);
             if (result != -1) {
-
                 Toast.makeText(
                         AddNoteActivity.this,
                         "Note saved successfully",
                         Toast.LENGTH_SHORT
                 ).show();
-
                 finish();
-
             } else {
-
                 Toast.makeText(
                         AddNoteActivity.this,
                         "Failed to save note",
