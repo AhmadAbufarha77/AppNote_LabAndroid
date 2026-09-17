@@ -113,15 +113,11 @@ public class favorites extends Fragment {
                         R.id.fabAddFavoriteNote
                 );
 
-        fab.setOnClickListener(v -> {
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-            Intent intent =
-                    new Intent(
-                            requireContext(),
-                            AddNoteActivity.class
-                    );
-
-            startActivity(intent);
+            }
         });
 
         return view;

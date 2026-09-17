@@ -97,14 +97,18 @@ public class allnote extends Fragment {
                 }
         );
         FloatingActionButton fab = view.findViewById(R.id.fabAddNote);
-        fab.setOnClickListener(v -> {
-            Intent intent =
-                    new Intent(
-                            requireContext(),
-                            AddNoteActivity.class
-                    );
-            startActivity(intent);
-        });
+        fab.setOnClickListener(new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View v) {
+                                       Intent intent =
+                                               new Intent(
+                                                       requireContext(),
+                                                       AddNoteActivity.class
+                                               );
+                                       startActivity(intent);
+                                   }
+                               }
+        );
         return view;
     }
     private void loadTags() {

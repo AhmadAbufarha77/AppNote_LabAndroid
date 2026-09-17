@@ -1,5 +1,6 @@
 package birzeit.edu.project;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,32 +37,35 @@ public class EditNoteActivity extends AppCompatActivity {
         etContent.setText(content);
         etTag.setText(tag);
         tvCreationDate.setText("Creation date: " + date);
-        btnSaveNote.setOnClickListener(v -> {
-            String newTitle = etTitle.getText().toString().trim();
-            String newContent = etContent.getText().toString().trim();
-            String newTag = etTag.getText().toString().trim();
-            if (newTitle.isEmpty()) {
-                etTitle.setError("Title is required");
-                return;
-            }
-            if (newContent.isEmpty()) {
-                etContent.setError("Content is required");
-                return;
-            }
-            int result = databaseHelper.updateNote(noteId, newTitle, newContent, newTag);
-            if (result > 0) {
-                Toast.makeText(
-                        EditNoteActivity.this,
-                        "Note updated successfully",
-                        Toast.LENGTH_SHORT
-                ).show();
-                finish();
-            } else {
-                Toast.makeText(
-                        EditNoteActivity.this,
-                        "Failed to update note",
-                        Toast.LENGTH_SHORT
-                ).show();
+        btnSaveNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newTitle = etTitle.getText().toString().trim();
+                String newContent = etContent.getText().toString().trim();
+                String newTag = etTag.getText().toString().trim();
+                if (newTitle.isEmpty()) {
+                    etTitle.setError("Title is required");
+                    return;
+                }
+                if (newContent.isEmpty()) {
+                    etContent.setError("Content is required");
+                    return;
+                }
+                int result = databaseHelper.updateNote(noteId, newTitle, newContent, newTag);
+                if (result > 0) {
+                    Toast.makeText(
+                            EditNoteActivity.this,
+                            "Note updated successfully",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    finish();
+                } else {
+                    Toast.makeText(
+                            EditNoteActivity.this,
+                            "Failed to update note",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
             }
         });
     }

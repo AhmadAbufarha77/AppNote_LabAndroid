@@ -22,7 +22,12 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.editprofileactivity);
 
         Toolbar toolbar = findViewById(R.id.toolbarEditProfile);
-        toolbar.setNavigationOnClickListener(v -> finish());
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         sharedPrefManager = SharedPrefManager.getInstance(this);
         databaseHelper = new DatabaseHelper(

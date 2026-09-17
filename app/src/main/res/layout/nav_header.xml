@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="John Doe"
+        android:text="Ahmad"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -27,7 +27,7 @@
         android:id="@+id/tvDrawerEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="john.doe@email.com"
+        android:text="ahmad@email.com"
         android:textColor="@color/white"
         android:textSize="13sp" />
 

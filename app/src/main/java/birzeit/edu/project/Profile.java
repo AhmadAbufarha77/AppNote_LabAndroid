@@ -45,9 +45,12 @@ public class Profile extends Fragment {
 
         loadUserData();
 
-        btnEditProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-            startActivity(intent);
+        btnEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                startActivity(intent);
+            }
         });
 
         return view;

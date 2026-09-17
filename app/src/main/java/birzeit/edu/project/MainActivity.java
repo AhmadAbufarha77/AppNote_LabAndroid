@@ -53,13 +53,9 @@ public class MainActivity extends AppCompatActivity {
         CheckBox cbRememberMe = (CheckBox) findViewById(R.id.cbRememberMe);
 
         String savedEmail = sharedPrefManager.readString("email", "");
-        String savedPassword = sharedPrefManager.readString("password", "");
         cbRememberMe.setChecked(sharedPrefManager.readBoolean("cbRemeberMe",false));
         if (!savedEmail.isEmpty()) {
             etEmail.setText(savedEmail);
-        }
-        if (!savedPassword.isEmpty()){
-            etPassword.setText(savedPassword);
         }
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {

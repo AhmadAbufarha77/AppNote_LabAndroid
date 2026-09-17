@@ -111,191 +111,202 @@ public class NoteDetailsFragment extends Fragment {
         }
 
 
-        btnEdit.setOnClickListener(v -> {
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddNote note =
+                        databaseHelper.getNoteById(
+                                noteId
+                        );
 
-            AddNote note =
-                    databaseHelper.getNoteById(
-                            noteId
-                    );
-
-            if (note == null) {
-                return;
-            }
-
-
-            Intent intent =
-                    new Intent(
-                            requireContext(),
-                            EditNoteActivity.class
-                    );
-
-            intent.putExtra(
-                    "noteId",
-                    note.getId()
-            );
-
-            intent.putExtra(
-                    "title",
-                    note.getTitle()
-            );
-
-            intent.putExtra(
-                    "content",
-                    note.getContent()
-            );
-
-            intent.putExtra(
-                    "tag",
-                    note.getTag()
-            );
-
-            intent.putExtra(
-                    "date",
-                    note.getCreationDate()
-            );
-
-            startActivity(intent);
-        });
+                if (note == null) {
+                    return;
+                }
 
 
-        btnDelete.setOnClickListener(v -> {
+                Intent intent =
+                        new Intent(
+                                requireContext(),
+                                EditNoteActivity.class
+                        );
 
-            new AlertDialog.Builder(
-                    requireContext()
-            )
-                    .setTitle("Delete Note")
-                    .setMessage(
-                            "Are you sure you want to delete this note?"
-                    )
-                    .setNegativeButton(
-                            "Cancel",
-                            null
-                    )
-                    .setPositiveButton(
-                            "Delete",
-                            (dialog, which) -> {
+                intent.putExtra(
+                        "noteId",
+                        note.getId()
+                );
 
-                                int result =
-                                        databaseHelper.deleteNote(
-                                                noteId
-                                        );
+                intent.putExtra(
+                        "title",
+                        note.getTitle()
+                );
 
-                                if (result > 0) {
+                intent.putExtra(
+                        "content",
+                        note.getContent()
+                );
 
-                                    Toast.makeText(
-                                            requireContext(),
-                                            "Note deleted",
-                                            Toast.LENGTH_SHORT
-                                    ).show();
+                intent.putExtra(
+                        "tag",
+                        note.getTag()
+                );
 
-
-                                    HomeActivity homeActivity =
-                                            (HomeActivity) requireActivity();
-
-                                    homeActivity.openAllNotes();
-                                }
-                            }
-                    )
-                    .show();
-        });
-
-
-        btnEmail.setOnClickListener(v -> {
-
-            AddNote note =
-                    databaseHelper.getNoteById(
-                            noteId
-                    );
-
-            if (note == null) {
-                return;
-            }
-
-
-            Intent intent =
-                    new Intent(
-                            Intent.ACTION_SENDTO
-                    );
-
-            intent.setData(
-                    Uri.parse("mailto:")
-            );
-
-            intent.putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    note.getTitle()
-            );
-
-            intent.putExtra(
-                    Intent.EXTRA_TEXT,
-                    note.getContent()
-            );
-
-
-            if (intent.resolveActivity(
-                    requireActivity()
-                            .getPackageManager()
-            ) != null) {
+                intent.putExtra(
+                        "date",
+                        note.getCreationDate()
+                );
 
                 startActivity(intent);
-
-            } else {
-
-                Toast.makeText(
-                        requireContext(),
-                        "No email application found",
-                        Toast.LENGTH_SHORT
-                ).show();
             }
         });
 
 
-        btnFavorite.setOnClickListener(v -> {
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(
+                        requireContext()
+                )
+                        .setTitle("Delete Note")
+                        .setMessage(
+                                "Are you sure you want to delete this note?"
+                        )
+                        .setNegativeButton(
+                                "Cancel",
+                                null
+                        )
+                        .setPositiveButton(
+                                "Delete",
+                                (dialog, which) -> {
 
-            AddNote note =
-                    databaseHelper.getNoteById(
-                            noteId
-                    );
+                                    int result =
+                                            databaseHelper.deleteNote(
+                                                    noteId
+                                            );
 
-            if (note == null) {
-                return;
+                                    if (result > 0) {
+
+                                        Toast.makeText(
+                                                requireContext(),
+                                                "Note deleted",
+                                                Toast.LENGTH_SHORT
+                                        ).show();
+
+
+                                        HomeActivity homeActivity =
+                                                (HomeActivity) requireActivity();
+
+                                        homeActivity.openAllNotes();
+                                    }
+                                }
+                        )
+                        .show();
             }
+        });
 
 
-            boolean newFavorite =
-                    !note.isFavorite();
+        btnEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddNote note =
+                        databaseHelper.getNoteById(
+                                noteId
+                        );
+
+                if (note == null) {
+                    return;
+                }
 
 
-            databaseHelper.updateFavorite(
-                    noteId,
-                    newFavorite
-            );
+                Intent intent =
+                        new Intent(
+                                Intent.ACTION_SENDTO
+                        );
 
-
-            if (newFavorite) {
-
-                btnFavorite.setImageResource(
-                        android.R.drawable.btn_star_big_on
+                intent.setData(
+                        Uri.parse("mailto:")
                 );
 
-            } else {
-
-                btnFavorite.setImageResource(
-                        android.R.drawable.btn_star_big_off
+                intent.putExtra(
+                        Intent.EXTRA_SUBJECT,
+                        note.getTitle()
                 );
-            }
+
+                intent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        note.getContent()
+                );
 
 
-            Animation animation =
-                    AnimationUtils.loadAnimation(
+                if (intent.resolveActivity(
+                        requireActivity()
+                                .getPackageManager()
+                ) != null) {
+
+                    startActivity(intent);
+
+                } else {
+
+                    Toast.makeText(
                             requireContext(),
-                            R.anim.favorite_star
-                    );
-
-            btnFavorite.startAnimation(
-                    animation
-            );
+                            "No email application found",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
         });
+
+
+        btnFavorite.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View v) {
+                                               AddNote note =
+                                                       databaseHelper.getNoteById(
+                                                               noteId
+                                                       );
+
+                                               if (note == null) {
+                                                   return;
+                                               }
+
+
+                                               boolean newFavorite =
+                                                       !note.isFavorite();
+
+
+                                               databaseHelper.updateFavorite(
+                                                       noteId,
+                                                       newFavorite
+                                               );
+
+
+                                               if (newFavorite) {
+
+                                                   btnFavorite.setImageResource(
+                                                           android.R.drawable.btn_star_big_on
+                                                   );
+
+                                               } else {
+
+                                                   btnFavorite.setImageResource(
+                                                           android.R.drawable.btn_star_big_off
+                                                   );
+                                               }
+
+
+                                               Animation animation =
+                                                       AnimationUtils.loadAnimation(
+                                                               requireContext(),
+                                                               R.anim.favorite_star
+                                                       );
+
+                                               btnFavorite.startAnimation(
+                                                       animation
+                                               );
+                                           }
+
+                                       }
+
+        );
 
 
         return view;

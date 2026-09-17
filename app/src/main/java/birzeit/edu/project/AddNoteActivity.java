@@ -1,6 +1,7 @@
 package birzeit.edu.project;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,33 +39,36 @@ public class AddNoteActivity extends AppCompatActivity {
         );
         String currentDate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(new Date());
         tvCreationDate.setText("Creation date: " + currentDate);
-        btnSaveNote.setOnClickListener(v -> {
-            String title = etTitle.getText().toString().trim();
-            String content = etContent.getText().toString().trim();
-            String tag = etTag.getText().toString().trim();
-            if (title.isEmpty()) {
-                etTitle.setError("Title is required");
-                return;
-            }
-            if (content.isEmpty()) {
-                etContent.setError("Content is required");
-                return;
-            }
-            AddNote note = new AddNote(0, title, content, tag, currentDate, false, currentUserEmail);
-            long result = databaseHelper.insertNote(note);
-            if (result != -1) {
-                Toast.makeText(
-                        AddNoteActivity.this,
-                        "Note saved successfully",
-                        Toast.LENGTH_SHORT
-                ).show();
-                finish();
-            } else {
-                Toast.makeText(
-                        AddNoteActivity.this,
-                        "Failed to save note",
-                        Toast.LENGTH_SHORT
-                ).show();
+        btnSaveNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = etTitle.getText().toString().trim();
+                String content = etContent.getText().toString().trim();
+                String tag = etTag.getText().toString().trim();
+                if (title.isEmpty()) {
+                    etTitle.setError("Title is required");
+                    return;
+                }
+                if (content.isEmpty()) {
+                    etContent.setError("Content is required");
+                    return;
+                }
+                AddNote note = new AddNote(0, title, content, tag, currentDate, false, currentUserEmail);
+                long result = databaseHelper.insertNote(note);
+                if (result != -1) {
+                    Toast.makeText(
+                            AddNoteActivity.this,
+                            "Note saved successfully",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    finish();
+                } else {
+                    Toast.makeText(
+                            AddNoteActivity.this,
+                            "Failed to save note",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
             }
         });
     }
